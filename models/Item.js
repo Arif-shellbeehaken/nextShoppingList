@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 // Create Schema
 const ItemSchema = new Schema({
-  name: {
+  item_name: {
     type: String,
     required: true,
   },
@@ -14,7 +14,7 @@ const ItemSchema = new Schema({
     type: Number,
   },
   likes: [],
-  image: String,
+  item_image: String,
   date: {
     type: Date,
     default: Date.now,

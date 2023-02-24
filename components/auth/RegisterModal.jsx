@@ -13,6 +13,7 @@ import {
 } from "reactstrap";
 
 import { useRegisterUserMutation } from "../../redux/slice/userSlice";
+
 import toast, { Toaster } from "react-hot-toast";
 
 const RegisterModal = ({ isAuthenticated }) => {
@@ -43,7 +44,7 @@ const RegisterModal = ({ isAuthenticated }) => {
 
     try {
       let newUser = await registerUser(userInfo);
-      console.log({ newUser });
+
       if (newUser.error) {
         toast.error(newUser.error.data.error);
       }

@@ -15,7 +15,7 @@ import toast, { Toaster } from "react-hot-toast";
 import Swal from "sweetalert2";
 import { useSession } from "next-auth/react";
 
-const ShoppingList = () => {
+const ShoppingList = ({ manualLogged }) => {
   const { data: session, status } = useSession();
   const [updateModal, setUpdatedModal] = useState("");
   const {
@@ -67,7 +67,7 @@ const ShoppingList = () => {
 
   return (
     <Container>
-      {session && <ItemModal />}
+      {(session || manualLogged?.token) && <ItemModal />}
 
       {isError ? (
         <h4 className="text-center m-auto">Oh no, there was an error</h4>
@@ -82,7 +82,7 @@ const ShoppingList = () => {
               <th>Name</th>
               <th>Category</th>
               <th>Price</th>
-              {session && <th>Action</th>}
+              {(session || manualLogged?.token) && <th>Action</th>}
             </tr>
           </thead>
           <tbody>
@@ -92,11 +92,11 @@ const ShoppingList = () => {
                 {/* <td>
               <Image src={item.image} alt="" width={40} height={40} />
             </td> */}
-                <td>{item.name}</td>
+                <td>{item.item_name}</td>
                 <td>{item.category}</td>
                 <td>{item.price}</td>
                 <td>
-                  {session && (
+                  {(session || manualLogged?.token) && (
                     <>
                       <Button
                         className="remove-btn"

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import {
   Collapse,
   Navbar,
@@ -12,11 +12,11 @@ import {
 import RegisterModal from "./auth/RegisterModal";
 import LoginModal from "./auth/LoginModal";
 import Logout from "./auth/Logout";
-import { signIn, signOut, useSession } from "next-auth/react";
-import LoginAuthModal from "./auth/LoginAuthModal";
+import { useSession } from "next-auth/react";
 
-const NavbarSection = () => {
+const NavbarSection = ({ manualLogged }) => {
   const { data: session, status } = useSession();
+
   const loading = status === "loading";
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,10 +26,12 @@ const NavbarSection = () => {
     <Fragment>
       <NavItem className="mt-2">
         <span className="navbar-text">
-          Welcome
+          Welcome{" "}
           <strong className="text-white">
             {/* {auth && auth.user ? `Welcome ${auth.user.name}` : ''} */}
-            {session?.user && ` ${session.user.name}`}
+            {manualLogged.token
+              ? manualLogged.user.name
+              : session?.user && session.user.name}
           </strong>
         </span>
       </NavItem>
@@ -63,7 +65,11 @@ const NavbarSection = () => {
             <Nav className="ml-auto" navbar>
               {/* {guestLinks} */}
               {/* {auth && auth.isAuthenticated ? authLinks : guestLinks} */}
-              {session ? authLinks : guestLinks}
+              {manualLogged.token
+                ? authLinks
+                : session
+                ? authLinks
+                : guestLinks}
             </Nav>
           </Collapse>
         </Container>

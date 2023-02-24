@@ -16,12 +16,15 @@ import {
 import { useUserLoginMutation } from "../../redux/slice/userSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Router from "next/router";
 
-const LoginModal = ({ isAuthenticated }) => {
+const LoginModal = () => {
+  const { data: session, status } = useSession();
   const [modal, setModal] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState(null);
+  // const router = useRouter();
   const [userLogin, isSuccess, isError, error, isLoading] =
     useUserLoginMutation();
 
@@ -45,7 +48,9 @@ const LoginModal = ({ isAuthenticated }) => {
       }
 
       if (newUser.data?.status === "success") {
+        localStorage.setItem("loginSession", JSON.stringify(newUser.data));
         toast.success("User Login successflly!.");
+        Router.reload();
       }
     } catch (err) {
       console.error(err);
@@ -60,11 +65,11 @@ const LoginModal = ({ isAuthenticated }) => {
   useEffect(() => {
     // If authenticated, close modal
     if (modal) {
-      if (isAuthenticated) {
+      if (session) {
         handleToggle();
       }
     }
-  }, [handleToggle, isAuthenticated, modal]);
+  }, [handleToggle, session, modal]);
 
   return (
     <>
@@ -73,7 +78,12 @@ const LoginModal = ({ isAuthenticated }) => {
           Login
         </NavLink>
 
-        <Modal isOpen={modal} toggle={handleToggle}>
+        <Modal
+          isOpen={modal}
+          toggle={handleToggle}
+          animation="false"
+          fade={false}
+        >
           <ModalHeader toggle={handleToggle}>Login</ModalHeader>
           <ModalBody>
             {/* {msg ? <Alert color="danger">{msg}</Alert> : null} */}

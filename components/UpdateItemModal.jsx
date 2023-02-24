@@ -16,13 +16,14 @@ import {
   useGetItemQuery,
   useUpdateItemMutation,
 } from "../redux/slice/itemSlice";
+
 import toast, { Toaster } from "react-hot-toast";
 
 const UpdateItemModal = ({ itemId, open }) => {
   const isAuthenticated = true;
   const [modal, setModal] = useState(false);
   const { data } = useGetItemQuery(itemId);
-  const [previousData, setPreviousData] = useState(data?.item);
+  const [previousData, setPreviousData] = useState(data?.item || {});
   const [formData, setFormData] = useState({});
 
   // update from data change handle
@@ -96,9 +97,9 @@ const UpdateItemModal = ({ itemId, open }) => {
                 <Label for="item_name">Item Name</Label>
                 <Input
                   type="text"
-                  name="name"
+                  name="item_name"
                   id="name"
-                  value={previousData?.name}
+                  value={previousData?.item_name}
                   placeholder="Add shopping item"
                   onChange={handleChange}
                 />

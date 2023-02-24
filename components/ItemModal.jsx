@@ -16,10 +16,17 @@ import { useAddItemMutation } from "../redux/slice/itemSlice";
 
 // From data change handle
 const modalReducer = (state, event) => {
-  return {
-    ...state,
-    [event.target.name]: event.target.value,
-  };
+  if (event.target.name === "item_image") {
+    return {
+      ...state,
+      [event.target.name]: event.target.files[0],
+    };
+  } else {
+    return {
+      ...state,
+      [event.target.name]: event.target.value,
+    };
+  }
 };
 
 const ItemModal = () => {
@@ -50,7 +57,7 @@ const ItemModal = () => {
     } catch (err) {
       toast.error(`Failed to save the post ${err}`);
     }
-    // console.log(formData);
+
     // Close modal
     handleToggle();
   };
@@ -78,7 +85,7 @@ const ItemModal = () => {
                 <Label for="item_name">Item Name</Label>
                 <Input
                   type="text"
-                  name="name"
+                  name="item_name"
                   id="item"
                   placeholder="Add shopping item"
                   onChange={setFormData}

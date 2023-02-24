@@ -1,6 +1,10 @@
 
 import { shoppingApi } from '../../redux/services/shoppingApi';
-
+export const config = {
+  api: {
+      bodyParser: false,
+  },
+}
 export const itemApiSlice = shoppingApi.injectEndpoints({
 
   endpoints: (builder) => ({
@@ -16,11 +20,11 @@ export const itemApiSlice = shoppingApi.injectEndpoints({
     }),
     // add api cal
     addItem: builder.mutation({
-      query: (initialItem) => ({
+      query: (formData) => ({
         url: '/api/items',
         method: 'POST',
         body: {
-          ...initialItem,
+          ...formData,
         },
       }),
       invalidatesTags: (result, error, arg) => [{ type: 'Item', id: arg._id }],
