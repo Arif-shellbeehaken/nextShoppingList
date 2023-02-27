@@ -14,7 +14,9 @@ const ItemSchema = new Schema({
     type: Number,
   },
   likes: [],
-  item_image: String,
+  item_image: {
+    type: String,
+  },
   date: {
     type: Date,
     default: Date.now,

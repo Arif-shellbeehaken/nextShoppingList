@@ -1,14 +1,9 @@
 import Item from '../models/Item';
-import cloudinary from "../config/cloudinary";
 
 // Create item
 export const createItem = async (req, res) => {
-
-  // console.log(req.body);
-  // const photo = req.body.item_image;
-  // const photoUrl = photo && await cloudinary.uploader.upload(photo);
+  console.log(req.body);
   try {
-    // photoUrl && (req.body.item_image = photoUrl.url);
     const item = await Item.create(req.body);
 
     res.status(201).json({
@@ -67,29 +62,12 @@ export const readItem = async (req, res) => {
 // Update item
 export const updateItem = async (req, res) => {
   const {itemId} = req.query;
-  const newItem = {name: req.body.name, category: req.body.category, price: req.body.price};
-  console.log({newItem});
-  const upload = multer({
-    storage: multer.diskStorage({
-        destination: "./public/uploads", // destination folder
-        filename: (req, file, cb) => cb(null, getFileName(file)),
-    }),
-});
+  // const newItem = {item_name: req.body.item_name, category: req.body.category, price: req.body.price};
 
-const getFileName = (file) => {
-    filename +=
-        "." +
-        file.originalname.substring(
-            file.originalname.lastIndexOf(".") + 1,
-            file.originalname.length
-        );
-    return filename;
-};
-console.log(upload);
 
-  if(itemId && newItem){
+  if(itemId){
     try {
-      const newData = await Item.findByIdAndUpdate({_id: itemId} , newItem);
+      const newData = await Item.findByIdAndUpdate({_id: itemId} , req.body);
       res.status(200).json({
         success: true,
         item: newData,
@@ -130,5 +108,22 @@ export const deleteItem = async (req, res) => {
       success: false,
       error,
     });
+  }
+};
+
+// Like dislike item
+export const likeDislikeItem = async (req, res) => {
+  const { id, email } = req.body;
+  try {
+    const item = await Item.findById(id);
+    if (!item.likes.includes(email)) {
+      await item.updateOne({ $push: { likes: email } });
+      res.status(200).json({ status: true, msg: 'Item liked!' });
+    } else {
+      await item.updateOne({ $pull: { likes: email } });
+      res.status(200).json({ status: true, msg: 'Item UnLiked!' });
+    }
+  } catch (error) {
+    res.status(500).json({ status: false, err: error.message });
   }
 };

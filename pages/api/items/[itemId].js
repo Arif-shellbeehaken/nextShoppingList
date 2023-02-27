@@ -12,16 +12,16 @@ export default async function handler(req, res) {
 
   // type of request
   const { method } = req;
-  console.log(method);
+
   switch (method) {
     case 'GET':
       readItem(req, res);
       break;
-    case 'PUT':
-      updateItem(req, res);
-      break;
     case 'DELETE':
       deleteItem(req, res);
+      break;
+    case 'PUT':
+      updateItem(req, res);
       break;
     default:
       res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);

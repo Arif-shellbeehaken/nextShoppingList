@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -13,27 +13,46 @@ import {
 } from "reactstrap";
 import toast, { Toaster } from "react-hot-toast";
 import { useAddItemMutation } from "../redux/slice/itemSlice";
+import { BsDribbble, BsPlusSquareFill } from "react-icons/bs";
 
-// From data change handle
-const modalReducer = (state, event) => {
-  if (event.target.name === "item_image") {
-    return {
-      ...state,
-      [event.target.name]: event.target.files[0],
-    };
-  } else {
-    return {
-      ...state,
-      [event.target.name]: event.target.value,
-    };
-  }
-};
-
-const ItemModal = () => {
+const ItemModal = ({ is }) => {
   const isAuthenticated = true;
   const [modal, setModal] = useState(false);
-  const [formData, setFormData] = useReducer(modalReducer, {});
+  const [formData, setFormData] = useState({});
   const [addItem, isSuccess, isError, isLoading, error] = useAddItemMutation();
+  const [imgUrl, setImgUrl] = useState("");
+
+  //image upload
+  const imageUpload = async (event) => {
+    const imgFrom = new FormData();
+    imgFrom.append("file", event.target.files[0]);
+    imgFrom.append("upload_preset", "shoppingCard");
+    const imgData = await fetch(
+      "https://api.cloudinary.com/v1_1/drvutnctp/image/upload",
+      {
+        method: "POST",
+        body: imgFrom,
+      }
+    ).then((response) => response.json());
+
+    setImgUrl(imgData.url);
+    console.log("formData", formData);
+  };
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      ["item_image"]: imgUrl,
+    });
+  }, [imgUrl]);
+
+  //handle form data change
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.id]: event.target.value,
+    });
+  };
 
   // modal toggled
   const handleToggle = () => setModal(!modal);
@@ -42,6 +61,7 @@ const ItemModal = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
+    console.log({ formData });
     if (Object.keys(formData).length == 0)
       return toast.error("Don't have For data");
 
@@ -65,13 +85,16 @@ const ItemModal = () => {
   return (
     <div>
       {isAuthenticated ? (
-        <Button
-          color="dark"
-          style={{ marginBottom: "2rem" }}
-          onClick={handleToggle}
-        >
-          Add Item
-        </Button>
+        <div className="col-6 float-start">
+          <Button
+            color="dark"
+            style={{ marginBottom: "2rem" }}
+            onClick={handleToggle}
+          >
+            <BsPlusSquareFill size={30} />
+            <span className="ms-2 fs-5 uppercase">ADD ITEM</span>
+          </Button>
+        </div>
       ) : (
         <h4 className="mb-3 ml-4">Please log in to manage items</h4>
       )}
@@ -86,9 +109,9 @@ const ItemModal = () => {
                 <Input
                   type="text"
                   name="item_name"
-                  id="item"
+                  id="item_name"
                   placeholder="Add shopping item"
-                  onChange={setFormData}
+                  onChange={handleChange}
                 />
               </Col>
               <Col md={6}>
@@ -99,7 +122,7 @@ const ItemModal = () => {
                     name="category"
                     id="category"
                     placeholder="Add shopping item category"
-                    onChange={setFormData}
+                    onChange={handleChange}
                   />
                 </FormGroup>
               </Col>
@@ -112,7 +135,7 @@ const ItemModal = () => {
                   name="price"
                   id="price"
                   defaultValue={0}
-                  onChange={setFormData}
+                  onChange={handleChange}
                 />
               </Col>
               <Col md={6}>
@@ -123,7 +146,7 @@ const ItemModal = () => {
                     name="item_image"
                     id="item_image"
                     placeholder="Add shopping item Image"
-                    onChange={setFormData}
+                    onChange={imageUpload}
                   />
                 </FormGroup>
               </Col>

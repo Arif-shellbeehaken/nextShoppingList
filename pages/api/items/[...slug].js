@@ -1,31 +1,20 @@
 import dbConnection from '../../../config/dbConnection';
 import {
-  createItem,
-  readItems,
-  updateItem,
-  deleteItem,
+  likeDislikeItem,
 } from '../../../controllers/ItemController';
 
 export default async function handler(req, res) {
   dbConnection().catch(() =>
-    res.status(405).send({ error: 'Error in the Connections' })
+    res.status(405).json({ error: 'Error in the Connection' })
   );
 
   // type of request
   const { method } = req;
-
+  console.log({method});
   switch (method) {
-    case 'GET':
-      readItems(req, res);
-      break;
-    case 'POST':
-      createItem(req, res);
-      break;
-    case 'DELETE':
-      deleteItem(req, res);
-      break;
+    
     case 'PUT':
-      updateItem(req, res);
+      likeDislikeItem(req, res);
       break;
     default:
       res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);

@@ -25,7 +25,30 @@ const UpdateItemModal = ({ itemId, open }) => {
   const { data } = useGetItemQuery(itemId);
   const [previousData, setPreviousData] = useState(data?.item || {});
   const [formData, setFormData] = useState({});
+  const [imgUrl, setImgUrl] = useState("");
 
+  //image upload
+  const imageUpload = async (event) => {
+    const imgFrom = new FormData();
+    imgFrom.append("file", event.target.files[0]);
+    imgFrom.append("upload_preset", "shoppingCard");
+    const imgData = await fetch(
+      "https://api.cloudinary.com/v1_1/drvutnctp/image/upload",
+      {
+        method: "POST",
+        body: imgFrom,
+      }
+    ).then((response) => response.json());
+
+    setImgUrl(imgData.url);
+  };
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      ["item_image"]: imgUrl,
+    });
+  }, [imgUrl]);
   // update from data change handle
   const handleChange = (event) => {
     setFormData({
@@ -98,7 +121,7 @@ const UpdateItemModal = ({ itemId, open }) => {
                 <Input
                   type="text"
                   name="item_name"
-                  id="name"
+                  id="item_name"
                   value={previousData?.item_name}
                   placeholder="Add shopping item"
                   onChange={handleChange}
@@ -137,7 +160,7 @@ const UpdateItemModal = ({ itemId, open }) => {
                     name="item_image"
                     id="item_image"
                     placeholder="Add shopping item Image"
-                    onChange={handleChange}
+                    onChange={imageUpload}
                   />
                 </FormGroup>
               </Col>

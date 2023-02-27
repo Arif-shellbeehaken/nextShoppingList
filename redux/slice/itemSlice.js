@@ -50,6 +50,16 @@ export const itemApiSlice = shoppingApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [{ type: 'Item', id: arg._id }],
     }),
+
+    // like dislike api call
+    likeDislike: builder.mutation({
+      query: ({id, email}) => ({
+        url: `/api/items/${id}/likeDislikes`,
+        method: 'PUT',
+        body: { id, email }
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: 'Item', id: arg._id }],
+    }),
   }),
 });
 
@@ -59,6 +69,5 @@ export const {
   useAddItemMutation,
   useDeleteItemMutation,
   useUpdateItemMutation,
-
-  // useItemLikeMutation
+  useLikeDislikeMutation,
 } = itemApiSlice;

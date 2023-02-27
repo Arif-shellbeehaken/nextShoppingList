@@ -12,10 +12,8 @@ export default function Home() {
 
   return (
     <main>
-      <Container>
         {/* <ItemModal /> */}
         <ShoppingList manualLogged={manualLogged} />
-      </Container>
     </main>
   );
 }
