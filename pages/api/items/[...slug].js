@@ -12,7 +12,6 @@ export default async function handler(req, res) {
   const { method } = req;
   console.log({method});
   switch (method) {
-    
     case 'PUT':
       likeDislikeItem(req, res);
       break;

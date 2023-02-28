@@ -16,7 +16,7 @@ import { useSession } from "next-auth/react";
 
 const NavbarSection = ({ manualLogged }) => {
   const { data: session, status } = useSession();
-
+  console.log({ session });
   const loading = status === "loading";
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,9 +29,7 @@ const NavbarSection = ({ manualLogged }) => {
           Welcome{" "}
           <strong className="text-white">
             {/* {auth && auth.user ? `Welcome ${auth.user.name}` : ''} */}
-            {manualLogged.token
-              ? manualLogged.user.name
-              : session?.user && session.user.name}
+            {session?.user?.name || session?.user?.user?.name}
           </strong>
         </span>
       </NavItem>
@@ -65,11 +63,7 @@ const NavbarSection = ({ manualLogged }) => {
             <Nav className="ml-auto" navbar>
               {/* {guestLinks} */}
               {/* {auth && auth.isAuthenticated ? authLinks : guestLinks} */}
-              {manualLogged.token
-                ? authLinks
-                : session
-                ? authLinks
-                : guestLinks}
+              {session ? authLinks : guestLinks}
             </Nav>
           </Collapse>
         </Container>

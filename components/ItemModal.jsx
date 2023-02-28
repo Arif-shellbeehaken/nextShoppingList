@@ -14,9 +14,9 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 import { useAddItemMutation } from "../redux/slice/itemSlice";
 import { BsDribbble, BsPlusSquareFill } from "react-icons/bs";
-
+import { useSession } from "next-auth/react";
 const ItemModal = ({ is }) => {
-  const isAuthenticated = true;
+  const { data: session, status } = useSession();
   const [modal, setModal] = useState(false);
   const [formData, setFormData] = useState({});
   const [addItem, isSuccess, isError, isLoading, error] = useAddItemMutation();
@@ -55,7 +55,12 @@ const ItemModal = ({ is }) => {
   };
 
   // modal toggled
-  const handleToggle = () => setModal(!modal);
+  const handleToggle = () => {
+    if (!session) {
+      return toast.error(`Sorry! You are not logged in. Please login first!`);
+    }
+    setModal(!modal);
+  };
 
   // handle form submitting
   const handleOnSubmit = async (e) => {
@@ -84,20 +89,16 @@ const ItemModal = ({ is }) => {
 
   return (
     <div>
-      {isAuthenticated ? (
-        <div className="col-6 float-start">
-          <Button
-            color="dark"
-            style={{ marginBottom: "2rem" }}
-            onClick={handleToggle}
-          >
-            <BsPlusSquareFill size={30} />
-            <span className="ms-2 fs-5 uppercase">ADD ITEM</span>
-          </Button>
-        </div>
-      ) : (
-        <h4 className="mb-3 ml-4">Please log in to manage items</h4>
-      )}
+      <div className="col-6 float-start">
+        <Button
+          color="dark"
+          style={{ marginBottom: "2rem" }}
+          onClick={handleToggle}
+        >
+          <BsPlusSquareFill size={30} />
+          <span className="ms-2 fs-5 uppercase">ADD ITEM</span>
+        </Button>
+      </div>
 
       <Modal isOpen={modal} toggle={handleToggle}>
         <ModalHeader toggle={handleToggle}>Add To Shopping List</ModalHeader>

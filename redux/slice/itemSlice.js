@@ -10,7 +10,7 @@ export const itemApiSlice = shoppingApi.injectEndpoints({
   endpoints: (builder) => ({
     // get items api call
     getItems: builder.query({
-      query: () => '/api/items',
+      query: () => '/api/home',
       providesTags: ['Item'],
     }),
     // get item api call

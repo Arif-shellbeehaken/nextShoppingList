@@ -5,24 +5,9 @@ export const Logout = () => {
   const { data: session, status } = useSession();
   return (
     <Fragment>
-      {session ? (
-        <NavLink
-          href={`/api/auth/signout`}
-          onClick={() => {
-            e.preventDefault();
-            signOut();
-          }}
-        >
-          Logout
-        </NavLink>
-      ) : (
-        <NavLink
-          href="/"
-          onClick={() => localStorage.setItem("loginSession", "")}
-        >
-          Logout
-        </NavLink>
-      )}
+      <NavLink href="/" onClick={() => signOut()}>
+        Logout
+      </NavLink>
     </Fragment>
   );
 };

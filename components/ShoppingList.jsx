@@ -38,13 +38,14 @@ import ItemModal from "./ItemModal";
 import toast, { Toaster } from "react-hot-toast";
 import Swal from "sweetalert2";
 import { useSession } from "next-auth/react";
+import LoginModal from "./auth/LoginModal";
 
 const ShoppingList = ({ manualLogged }) => {
   const { data: session, status } = useSession();
   const [updateModal, setUpdatedModal] = useState("");
   const [listView, setListView] = useState(false);
   const [logedEmail, setLogedEmail] = useState(
-    session ? session.user.email : manualLogged.user?.email
+    session?.user?.email || session?.user?.user?.email
   );
 
   const {
@@ -58,6 +59,10 @@ const ShoppingList = ({ manualLogged }) => {
   const [likeDislike] = useLikeDislikeMutation();
 
   const handleDelete = (id) => {
+    if (!session) {
+      toast.error(`Sorry! You are not logged in. Please login first!`);
+      return <LoginModal />;
+    }
     try {
       Swal.fire({
         title: "Are you sure?",
@@ -89,6 +94,9 @@ const ShoppingList = ({ manualLogged }) => {
   };
 
   const handleReaction = async (id) => {
+    if (!session) {
+      return toast.error(`Sorry! You are not logged in. Please login first!`);
+    }
     try {
       await likeDislike({ id, email: logedEmail });
     } catch (err) {
@@ -97,9 +105,14 @@ const ShoppingList = ({ manualLogged }) => {
   };
 
   useEffect(() => {
-    setLogedEmail(session ? session.user.email : manualLogged.user?.email);
-  }, [session, manualLogged]);
+    setLogedEmail(session?.user?.email || session?.user?.user?.email);
+  }, [session]);
+
+  // console.log({ logedEmail });
   const handleUpdate = async (e) => {
+    if (!session) {
+      return toast.error(`Sorry! You are not logged in. Please login first!`);
+    }
     setUpdatedModal("");
     setUpdatedModal(e);
   };
@@ -110,7 +123,8 @@ const ShoppingList = ({ manualLogged }) => {
 
   return (
     <Container>
-      {(session || manualLogged?.token) && <ItemModal />}
+      {/* {(session || manualLogged?.token) && <ItemModal />} */}
+      <ItemModal />
       {isError ? (
         <h4 className="text-center m-auto">Oh no, there was an error</h4>
       ) : isLoading ? (
@@ -139,7 +153,7 @@ const ShoppingList = ({ manualLogged }) => {
                 <th>Name</th>
                 <th>Category</th>
                 <th>Price</th>
-                {(session || manualLogged?.token) && <th>Action</th>}
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -158,26 +172,24 @@ const ShoppingList = ({ manualLogged }) => {
                   <td>{item.category}</td>
                   <td>{item.price}</td>
                   <td>
-                    {(session || manualLogged?.token) && (
-                      <>
-                        <Button
-                          className="remove-btn"
-                          color="danger"
-                          size="sm"
-                          onClick={() => handleDelete(item._id)}
-                        >
-                          <BsFillTrashFill />
-                        </Button>{" "}
-                        <Button
-                          className="edit-btn "
-                          color="info"
-                          size="sm"
-                          onClick={() => handleUpdate(item._id)}
-                        >
-                          <BsWrench />
-                        </Button>
-                      </>
-                    )}
+                    <>
+                      <Button
+                        className="remove-btn"
+                        color="danger"
+                        size="sm"
+                        onClick={() => handleDelete(item._id)}
+                      >
+                        <BsFillTrashFill />
+                      </Button>{" "}
+                      <Button
+                        className="edit-btn "
+                        color="info"
+                        size="sm"
+                        onClick={() => handleUpdate(item._id)}
+                      >
+                        <BsWrench />
+                      </Button>
+                    </>
                   </td>
                 </tr>
               ))}
@@ -188,7 +200,7 @@ const ShoppingList = ({ manualLogged }) => {
         <>
           <div
             className={`mb-5 d-flex flex-row-right flex-row-reverse float-right ${
-              logedEmail ? "col-6" : "col-12"
+              logedEmail ? "col-6" : "col-6"
             }`}
           >
             <Button
@@ -221,50 +233,49 @@ const ShoppingList = ({ manualLogged }) => {
                       <CardText>
                         Tk. <strong>{item.price}</strong>
                       </CardText>
-                      {(session || manualLogged?.token) && (
+
+                      <div className="d-flex justify-content-between">
                         <div className="d-flex justify-content-between">
-                          <div className="d-flex justify-content-between">
-                            <Button
-                              className="remove-btn"
-                              color="danger"
-                              size="md"
-                              onClick={() => handleDelete(item._id)}
-                            >
-                              <BsFillTrashFill />
-                            </Button>
-                            <Button
-                              className="edit-btn ms-3"
-                              color="info"
-                              size="md"
-                              onClick={() => handleUpdate(item._id)}
-                            >
-                              <BsWrench />
-                            </Button>
-                          </div>
-                          <div className="d-flex justify-content-between">
-                            <Button
-                              className="border-none"
-                              size="md"
-                              onClick={() => handleReaction(item._id)}
-                            >
-                              {!item.likes.includes(logedEmail) ? (
-                                <BsHeart
-                                  size={30}
-                                  color="pink"
-                                  className="cursor-pointer"
-                                />
-                              ) : (
-                                <BsHeartFill
-                                  size={30}
-                                  color="pink"
-                                  className="cursor-pointer"
-                                />
-                              )}
-                              <span className="fs-6">{item.likes.length}</span>
-                            </Button>
-                          </div>
+                          <Button
+                            className="remove-btn"
+                            color="danger"
+                            size="md"
+                            onClick={() => handleDelete(item._id)}
+                          >
+                            <BsFillTrashFill />
+                          </Button>
+                          <Button
+                            className="edit-btn ms-3"
+                            color="info"
+                            size="md"
+                            onClick={() => handleUpdate(item._id)}
+                          >
+                            <BsWrench />
+                          </Button>
                         </div>
-                      )}
+                        <div className="d-flex justify-content-between">
+                          <Button
+                            className="border-none"
+                            size="md"
+                            onClick={() => handleReaction(item._id)}
+                          >
+                            {!item.likes.includes(logedEmail) ? (
+                              <BsHeart
+                                size={30}
+                                color="pink"
+                                className="cursor-pointer"
+                              />
+                            ) : (
+                              <BsHeartFill
+                                size={30}
+                                color="pink"
+                                className="cursor-pointer"
+                              />
+                            )}
+                            <span className="fs-6">{item.likes.length}</span>
+                          </Button>
+                        </div>
+                      </div>
                     </CardBody>
                   </Card>
                 </Col>

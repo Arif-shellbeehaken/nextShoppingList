@@ -10,23 +10,16 @@ import {
   Label,
   Input,
   NavLink,
-  Alert,
 } from "reactstrap";
 
-import { useUserLoginMutation } from "../../redux/slice/userSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { signIn, signOut, useSession } from "next-auth/react";
-import Router from "next/router";
+import Image from "next/image";
 
 const LoginModal = () => {
-  const { data: session, status } = useSession();
   const [modal, setModal] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [msg, setMsg] = useState(null);
-  // const router = useRouter();
-  const [userLogin, isSuccess, isError, error, isLoading] =
-    useUserLoginMutation();
 
   const handleToggle = useCallback(() => {
     setModal(!modal);
@@ -37,39 +30,17 @@ const LoginModal = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    const userInfo = { email: email, password: password };
-    console.log(userInfo);
-    try {
-      let newUser = await userLogin(userInfo);
-      console.log({ newUser });
-      if (newUser.data?.status !== "success" && newUser.error.data.error) {
-        toast.error(newUser.error.data.error.msg);
-      }
-
-      if (newUser.data?.status === "success") {
-        localStorage.setItem("loginSession", JSON.stringify(newUser.data));
-        toast.success("User Login successflly!.");
-        Router.reload();
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error(err.message);
-    }
+    const result = await signIn("credentials", {
+      email: email,
+      password: password,
+      redirect: true,
+      callbackUrl: "http://localhost:3000",
+    });
 
     // Close modal
     handleToggle();
     // Attempt to login
   };
-
-  useEffect(() => {
-    // If authenticated, close modal
-    if (modal) {
-      if (session) {
-        handleToggle();
-      }
-    }
-  }, [handleToggle, session, modal]);
 
   return (
     <>
@@ -114,7 +85,7 @@ const LoginModal = () => {
                   block
                   onClick={handleOnSubmit}
                 >
-                  {isLoading ? "Login process continue..." : "Login"}
+                  Login
                 </Button>
               </FormGroup>
             </Form>
@@ -124,15 +95,44 @@ const LoginModal = () => {
             <h2 className="text-center">OR</h2>
             <div className="text-center align-center justify-center m-5">
               <Fragment>
-                <NavLink
-                  href={`/api/auth/signin`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    signIn();
-                  }}
-                >
-                  Login By Google Account
-                </NavLink>
+                <div className="border rounded p-2 mb-3">
+                  <NavLink
+                    href={`/api/auth/signin`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      signIn("google", {
+                        callbackUrl: "http://localhost:3000",
+                      });
+                    }}
+                  >
+                    <Image
+                      src={"/google.svg"}
+                      width={25}
+                      height={25}
+                      alt="github"
+                    />{" "}
+                    Login with Google
+                  </NavLink>
+                </div>
+                <div className="border rounded p-2 mb-3">
+                  <NavLink
+                    href={`/api/auth/signin`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      signIn("github", {
+                        callbackUrl: "http://localhost:3000",
+                      });
+                    }}
+                  >
+                    <Image
+                      src={"/github.svg"}
+                      width={25}
+                      height={25}
+                      alt="github"
+                    />{" "}
+                    Login with Github
+                  </NavLink>
+                </div>
               </Fragment>
             </div>
           </div>
