@@ -6,12 +6,9 @@ import {
   deleteItem,
 } from '../../../controllers/ItemController';
 
-export default async function handler(req, res) {
-  dbConnection().catch(() =>
-    res.status(405).send({ error: 'Error in the Connections' })
-  );
+import jwtNextTokenVerify from '../../../lib/jwtNextTokenVerify';
+const handler = async (req, res) => {
 
-  // type of request
   const { method } = req;
 
   switch (method) {
@@ -33,3 +30,5 @@ export default async function handler(req, res) {
       break;
   }
 }
+
+export default jwtNextTokenVerify(handler);

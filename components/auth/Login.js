@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useCallback, Fragment } from "react";
-import styles from "../../styles/Home.module.css";
+import React, { Fragment } from "react";
+
 import {
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
   Form,
   FormGroup,
   Label,
@@ -12,52 +9,17 @@ import {
   NavLink,
 } from "reactstrap";
 
-import toast, { Toaster } from "react-hot-toast";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
-
-const LoginModal = () => {
-  const [modal, setModal] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleToggle = useCallback(() => {
-    setModal(!modal);
-  }, [modal]);
-
-  const handleChangeEmail = (e) => setEmail(e.target.value);
-  const handleChangePassword = (e) => setPassword(e.target.value);
-
-  const handleOnSubmit = async (e) => {
-    e.preventDefault();
-    const result = await signIn("credentials", {
-      email: email,
-      password: password,
-      redirect: true,
-      callbackUrl: "http://localhost:3000",
-    });
-
-    // Close modal
-    handleToggle();
-    // Attempt to login
-  };
-
+import useAuthHook from "../../BusinessLogic/useAuthHook";
+const Login = () => {
+  const {handleLoginOnSubmit: handleOnSubmit,handleChangeEmail,handleChangePassword } = useAuthHook();
   return (
     <>
-      <div>
-        <NavLink onClick={handleToggle} href="#">
-          Login
-        </NavLink>
-
-        <Modal
-          isOpen={modal}
-          toggle={handleToggle}
-          animation="false"
-          fade={false}
-        >
-          <ModalHeader toggle={handleToggle}>Login</ModalHeader>
-          <ModalBody>
-            {/* {msg ? <Alert color="danger">{msg}</Alert> : null} */}
+    <div className="offset-col-3 col-6 ">
+      <div className="mt-5 mb-5 items-center">
+        <h2 className="">Login</h2>
+      </div>
             <Form>
               <FormGroup>
                 <Label for="email">Email</Label>
@@ -89,7 +51,7 @@ const LoginModal = () => {
                 </Button>
               </FormGroup>
             </Form>
-          </ModalBody>
+
           <div>
             <hr />
             <h2 className="text-center">OR</h2>
@@ -101,7 +63,7 @@ const LoginModal = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       signIn("google", {
-                        callbackUrl: "http://localhost:3000",
+                        callbackUrl: "/",
                       });
                     }}
                   >
@@ -120,7 +82,7 @@ const LoginModal = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       signIn("github", {
-                        callbackUrl: "http://localhost:3000",
+                        callbackUrl: "/",
                       });
                     }}
                   >
@@ -136,11 +98,9 @@ const LoginModal = () => {
               </Fragment>
             </div>
           </div>
-        </Modal>
-        <Toaster position="top-right" reverseOrder={false} />
       </div>
     </>
   );
 };
 
-export default LoginModal;
+export default Login;

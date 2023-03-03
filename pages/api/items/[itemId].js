@@ -4,22 +4,19 @@ import {
   updateItem,
   deleteItem,
 } from '../../../controllers/ItemController';
+import jwtNextTokenVerify from '../../../lib/jwtNextTokenVerify';
 
-export default async function handler(req, res) {
-  dbConnection().catch(() =>
-    res.status(405).json({ error: 'Error in the Connection' })
-  );
+const handler = async (req, res) => {
 
-  // type of request
   const { method } = req;
   switch (method) {
     case 'GET':
       readItem(req, res);
       break;
-    case 'DELETE':
+    case 'DELETE': // TODO: validate
       deleteItem(req, res);
       break;
-    case 'PUT':
+    case 'PUT': // TODO: validate
       updateItem(req, res);
       break;
     default:
@@ -28,3 +25,5 @@ export default async function handler(req, res) {
       break;
   }
 }
+
+export default handler;

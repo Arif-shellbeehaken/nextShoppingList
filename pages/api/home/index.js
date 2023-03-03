@@ -8,7 +8,6 @@ export default async function handler(req, res) {
     res.status(405).send({ error: 'Error in the Connections' })
   );
 
-  // type of request
   const { method } = req;
 
   switch (method) {

@@ -1,13 +1,10 @@
 import User from '../models/User';
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
-import auth from '../middleware/auth';
 
-// Create item
 export const registerUser = async (req, res) => {
    const {name, email, password} = req.body;
 
-  // Simple validation
   if (!name || !email || !password) {
     return res.status(400).json({error: { msg: 'Please enter all fields' }});
   }
@@ -47,18 +44,16 @@ export const registerUser = async (req, res) => {
 };
 
 
-// User login method
 export const userLogin = async (req, res) => {
 
     const { email, password } = req.body;
 
-  // Simple validation
   if (!email || !password) {
     return res.status(400).json({error: { msg: 'Please enter all fields' }});
   }
 
   try {
-    // Check for existing user
+
     const user = await User.findOne({email: email});
     if (!user) throw Error('User does not exist');
     
@@ -82,7 +77,7 @@ export const userLogin = async (req, res) => {
     res.status(400).json({error: {error: e, msg: e.message }});
   }
 }
-// Read users (all)
+
 export const readUsersInfo = async (req, res) => {
   try {
     const users = await User.find().sort({ createdAt: -1 });
@@ -99,7 +94,6 @@ export const readUsersInfo = async (req, res) => {
   }
 };
 
-// Read user
 export const readUserInfo = async (req, res) => {
   try {
     const user = await User.findById(req.query.userId);
@@ -123,7 +117,6 @@ export const readUserInfo = async (req, res) => {
   }
 };
 
-// Update user
 export const updateUserInfo = async (req, res) => {
   const {userId} = req.query;
   const newUser = {name: req.body.name, email: req.body.email};
@@ -149,7 +142,6 @@ export const updateUserInfo = async (req, res) => {
   }
 };
 
-// Delete user
 export const deleteUserInfo = async (req, res) => {
   try {
     const user = await User.findById(req.query.itemId);

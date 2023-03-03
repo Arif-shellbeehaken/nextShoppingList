@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState } from "react";
 import {
   Collapse,
   Navbar,
@@ -7,17 +7,16 @@ import {
   Nav,
   NavItem,
   Container,
+  NavLink,
 } from "reactstrap";
 
-import RegisterModal from "./auth/RegisterModal";
-import LoginModal from "./auth/LoginModal";
-import Logout from "./auth/Logout";
-import { useSession } from "next-auth/react";
 
-const NavbarSection = ({ manualLogged }) => {
-  const { data: session, status } = useSession();
-  console.log({ session });
-  const loading = status === "loading";
+import { useSession } from "next-auth/react";
+import Logout from "./auth/Logout";
+
+const NavbarSection = () => {
+  const { data: session } = useSession();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => setIsOpen(!isOpen);
@@ -27,14 +26,14 @@ const NavbarSection = ({ manualLogged }) => {
       <NavItem className="mt-2">
         <span className="navbar-text">
           Welcome{" "}
-          <strong className="text-white">
-            {/* {auth && auth.user ? `Welcome ${auth.user.name}` : ''} */}
+          <strong className="text-info">
             {session?.user?.name || session?.user?.user?.name}
           </strong>
         </span>
       </NavItem>
+      {!isOpen ? <div className="d-flex align-items-center ms-2 text-white">|</div> : ""}
+        
       <NavItem className="mr-2">
-        {" "}
         <Logout />
       </NavItem>
     </Fragment>
@@ -43,12 +42,10 @@ const NavbarSection = ({ manualLogged }) => {
   const guestLinks = (
     <Fragment>
       <NavItem>
-        {" "}
-        <RegisterModal />{" "}
+        <NavLink href="/auth/register" className="ms-2">Register</NavLink>
       </NavItem>
       <NavItem>
-        {" "}
-        <LoginModal />{" "}
+        <NavLink href="/auth/signin" className="ms-2">Login</NavLink>
       </NavItem>
     </Fragment>
   );
@@ -57,12 +54,15 @@ const NavbarSection = ({ manualLogged }) => {
     <div>
       <Navbar color="dark" dark expand="sm" className="mb-5">
         <NavbarBrand href="/">ShoppingList</NavbarBrand>
+        <Nav navbar>
+          <NavItem>
+            <NavLink href="/user" className="ms-2">User</NavLink>
+          </NavItem>
+        </Nav>
         <NavbarToggler onClick={handleToggle} />
         <Container>
           <Collapse isOpen={isOpen} navbar className="justify-content-end">
             <Nav className="ml-auto" navbar>
-              {/* {guestLinks} */}
-              {/* {auth && auth.isAuthenticated ? authLinks : guestLinks} */}
               {session ? authLinks : guestLinks}
             </Nav>
           </Collapse>

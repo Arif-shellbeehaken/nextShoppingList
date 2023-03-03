@@ -6,8 +6,6 @@ import { shoppingApi } from './services/shoppingApi';
 export const store = configureStore({
   reducer: {
     [shoppingApi.reducerPath]: shoppingApi.reducer,
-    item: itemSlice,
-    user: userSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(shoppingApi.middleware),

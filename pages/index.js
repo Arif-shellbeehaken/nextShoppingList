@@ -1,10 +1,12 @@
-import ShoppingList from '../components/ShoppingList';
+
+import NavbarSection from '../components/NavbarSection';
+import ShoppingItem from '../components/ShoppingItem';
 
 export default function Home() {
 
   return (
     <main>
-        <ShoppingList/>
+        <ShoppingItem />
     </main>
   );
 }

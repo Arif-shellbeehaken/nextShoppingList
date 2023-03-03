@@ -3,14 +3,11 @@ import {
   likeDislikeItem,
 } from '../../../controllers/ItemController';
 
-export default async function handler(req, res) {
-  dbConnection().catch(() =>
-    res.status(405).json({ error: 'Error in the Connection' })
-  );
+import jwtNextTokenVerify from '../../../lib/jwtNextTokenVerify';
+const handler = async (req, res) => {
 
-  // type of request
   const { method } = req;
-  console.log({method});
+
   switch (method) {
     case 'PUT':
       likeDislikeItem(req, res);
@@ -21,3 +18,5 @@ export default async function handler(req, res) {
       break;
   }
 }
+
+export default jwtNextTokenVerify(handler);

@@ -29,6 +29,7 @@ export default NextAuth({
           },
           async authorize(credentials, req) {
             const { email, password } = credentials;
+
             const res = await fetch("http://localhost:3000/api/users/login", {
               method: "POST",
               headers: {
@@ -48,23 +49,19 @@ export default NextAuth({
           },
         }),
     ],
-    theme: {
-      colorScheme: "dark",
-    },
 
     callbacks: {
       async jwt({ token, user }) {
         return { ...token, ...user };
       },
       async session({ session, token, user }) {
-        // Send properties to the client, like an access_token from a provider.
         session.user = token;
   
         return session;
       },
     },
   
-    // pages: {
-    //   signIn: "/",
-    // },
+    pages: {
+      signIn: "/auth/signin",
+    },
 })

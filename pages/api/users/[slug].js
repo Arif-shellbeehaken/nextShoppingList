@@ -5,9 +5,6 @@ import {
 } from '../../../controllers/UserController';
 
 export default async function handler(req, res) {
-  dbConnection().catch(() =>
-    res.status(405).send({ error: 'Error in the Connections' })
-  );
 
   // type of request
   const { method, url } = req;

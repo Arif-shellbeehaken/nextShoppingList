@@ -4,17 +4,18 @@ import { shoppingApi } from '../../redux/services/shoppingApi';
 export const userApiSlice = shoppingApi.injectEndpoints({
 
   endpoints: (builder) => ({
-    // get items api call
     getUsersInfo: builder.query({
       query: () => '/api/users',
       providesTags: ['User'],
     }),
-    // get item api call
+
+
     getUserInfo: builder.query({
       query: (userId) => `/api/users/${userId}`,
       providesTags: ['User'],
     }),
-    // add api cal
+
+
     registerUser: builder.mutation({
       query: (userInfo) => ({
         url: '/api/users/register',
@@ -26,7 +27,7 @@ export const userApiSlice = shoppingApi.injectEndpoints({
       invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg._id }],
     }),
 
-    // login user
+
     userLogin: builder.mutation({
       query: (loginInfo) => ({
           url: '/api/users/login',
@@ -35,7 +36,8 @@ export const userApiSlice = shoppingApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg._id }],
   }),
-    // update api call
+
+
     updateUserInfo: builder.mutation({
       query: ({userInfo, userId}) => ({
         url: `/api/users?userId=${userId}`,
@@ -47,7 +49,7 @@ export const userApiSlice = shoppingApi.injectEndpoints({
       invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg._id }],
     }),
 
-    // delete api call
+
     deleteUserInfo: builder.mutation({
       query: ({ id }) => ({
         url: `/api/users/${id}`,
@@ -66,5 +68,5 @@ export const {
   useDeleteUserInfoMutation,
   useUpdateUserInfoMutation,
   useUserLoginMutation,
-  // useItemLikeMutation
+
 } = userApiSlice;

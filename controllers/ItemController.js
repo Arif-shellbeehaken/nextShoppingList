@@ -1,11 +1,10 @@
 import Item from '../models/Item';
 
-// Create item
+
 export const createItem = async (req, res) => {
-  console.log(req.body);
   try {
     const item = await Item.create(req.body);
-
+    console.log({item});
     res.status(201).json({
       success: true,
       item,
@@ -18,15 +17,14 @@ export const createItem = async (req, res) => {
   }
 };
 
-// Read items (all)
+
 export const readItems = async (req, res) => {
   try {
     const items = await Item.find().sort({ createdAt: -1 });
-
     res.status(200).json({
-      success: true,
-      items,
-    });
+        success: true,
+        items,
+      });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -35,7 +33,7 @@ export const readItems = async (req, res) => {
   }
 };
 
-// Read item
+
 export const readItem = async (req, res) => {
   try {
     const item = await Item.findById(req.query.itemId);
@@ -59,10 +57,9 @@ export const readItem = async (req, res) => {
   }
 };
 
-// Update item
+
 export const updateItem = async (req, res) => {
   const {itemId} = req.query;
-  // const newItem = {item_name: req.body.item_name, category: req.body.category, price: req.body.price};
 
 
   if(itemId){
@@ -86,7 +83,7 @@ export const updateItem = async (req, res) => {
   }
 };
 
-// Delete item
+
 export const deleteItem = async (req, res) => {
   try {
     const item = await Item.findById(req.query.itemId);
@@ -111,7 +108,6 @@ export const deleteItem = async (req, res) => {
   }
 };
 
-// Like dislike item
 export const likeDislikeItem = async (req, res) => {
   const { id, email } = req.body;
   try {
