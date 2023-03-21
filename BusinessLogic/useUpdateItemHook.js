@@ -9,11 +9,12 @@ import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from 'next/router';
 
 const useUpdateItemHook = ({itemId}) => {
+  const { data } = useGetItemQuery(itemId);
   const [previousData, setPreviousData] = useState(data?.item || {});
   const [formData, setFormData] = useState({});
   const [imgUrl, setImgUrl] = useState("");
 
-  const { data } = useGetItemQuery(itemId);
+
   const [updateItem, isSuccess, isError, isLoading, error] =
   useUpdateItemMutation();
 
@@ -68,6 +69,7 @@ const useUpdateItemHook = ({itemId}) => {
   
       try {
         if (itemId) {
+          if(imgUrl === '') formData['item_image'] = data?.item?.item_image;
           await updateItem({ formData, itemId }); 
         } else {
           toast.error(Msg.updateItem.idRequier);

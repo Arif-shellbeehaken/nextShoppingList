@@ -20,7 +20,7 @@ const useShoppingListHook = () => {
       session?.user?.email || session?.user?.user?.email
       );
       const [deleteItem, isSuccess, isError] = useDeleteItemMutation();
-      const [likeDislike, {isSuccess: reactSuccess}] = useLikeDislikeMutation();
+      const [likeDislike] = useLikeDislikeMutation();
       
 
     const handleDelete = (id) => {
@@ -65,10 +65,9 @@ const useShoppingListHook = () => {
       }
       try {
         const likeDislikeStatus = await likeDislike({ id, email: logedEmail });
-        if(likeDislikeStatus?.data?.code === 200) toast.success(Msg.updateItem.success);
-        else toast.success(Msg.updateItem.error);
 
-        router.reload("/");
+        if(likeDislikeStatus?.data?.status === true) toast.success(likeDislikeStatus?.data?.msg);
+        else toast.error(Msg.updateItem.error);
       } catch (err) {
         toast.error(Msg.updateItem.error, err);
       }

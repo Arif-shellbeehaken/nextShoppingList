@@ -19,4 +19,4 @@ const handler = async (req, res) => {
   }
 }
 
-export default jwtNextTokenVerify(handler);
+export default handler;

@@ -25,7 +25,7 @@ const ShoppingCard = () => {
     useShoppingListHook();
 
   const { data } = useGetItemsQuery();
-
+  
   return (
     <div className="col-12">
       <CardGroup>
