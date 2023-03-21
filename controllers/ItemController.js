@@ -1,10 +1,9 @@
 import Item from '../models/Item';
 
-
 export const createItem = async (req, res) => {
+  console.log(req.body);
   try {
     const item = await Item.create(req.body);
-    console.log({item});
     res.status(201).json({
       success: true,
       item,

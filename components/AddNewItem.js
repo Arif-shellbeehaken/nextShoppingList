@@ -9,7 +9,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
-
+import AddItemText from "../constaint/enum/addItem";
 import useItemModalHook from "../BusinessLogic/useAddItemHook";
 
 const AddNewItem = () => {
@@ -21,13 +21,13 @@ const AddNewItem = () => {
   return (
     <div className="offset-col-3 col-6 ">
       <div className="mt-5 mb-5 items-center">
-        <h2 className="">Add To Shopping List</h2>
+        <h2 className="">{AddItemText.Add_To_Shopping_List}</h2>
       </div>
 
           <Form onSubmit={handleOnSubmit}>
             <Row>
               <Col md={6}>
-                <Label for="item_name">Item Name</Label>
+                <Label for="item_name">{AddItemText.Item_Name}</Label>
                 <Input
                   type="text"
                   name="item_name"
@@ -38,7 +38,7 @@ const AddNewItem = () => {
               </Col>
               <Col md={6}>
                 <FormGroup>
-                  <Label for="category">Category</Label>
+                  <Label for="category">{AddItemText.Category}</Label>
                   <Input
                     type="text"
                     name="category"
@@ -51,7 +51,7 @@ const AddNewItem = () => {
             </Row>
             <Row>
               <Col md={6}>
-                <Label for="price">Price</Label>
+                <Label for="price">{AddItemText.Price}</Label>
                 <Input
                   type="number"
                   name="price"
@@ -62,7 +62,7 @@ const AddNewItem = () => {
               </Col>
               <Col md={6}>
                 <FormGroup>
-                  <Label for="item_image">Image</Label>
+                  <Label for="item_image">{AddItemText.Image}</Label>
                   <Input
                     type="file"
                     name="item_image"
@@ -75,7 +75,7 @@ const AddNewItem = () => {
             </Row>
             <FormGroup>
               <Button color="dark" style={{ marginTop: "2rem" }} block>
-                {isLoading ? "Submiting..." : "Add Item"}
+                {isLoading ? AddItemText.Submiting : AddItemText.Add_Item}
               </Button>
             </FormGroup>
           </Form>

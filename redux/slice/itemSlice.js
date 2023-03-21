@@ -61,6 +61,7 @@ export const itemApiSlice = shoppingApi.injectEndpoints({
         method: 'PUT',
         body: { id, email }
       }),
+      providesTags: ['Item'],
       invalidatesTags: (result, error, arg) => [{ type: 'Item', id: arg._id }],
     }),
   }),

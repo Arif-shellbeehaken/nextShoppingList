@@ -17,6 +17,10 @@ const ItemSchema = new Schema({
   item_image: {
     type: String,
   },
+  owner: {
+    type: String,
+    required: true,
+  },
   date: {
     type: Date,
     default: Date.now,

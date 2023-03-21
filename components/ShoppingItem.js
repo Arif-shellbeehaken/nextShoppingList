@@ -4,7 +4,7 @@ import {
   Button,
   Container
 } from "reactstrap";
-
+import ShoppingItemText from "../constaint/enum/shoppingItem";
 import useShoppingListHook from "../BusinessLogic/useShoppingListHook";
 import Link from "next/link";
 import ShoppingList from "./ShoppingList";
@@ -26,7 +26,7 @@ const ShoppingItem = () => {
           style={{ marginBottom: "2rem", color: 'inherit', textDecoration: 'inherit', background: "#fff"}}
         >
           <BsPlusSquareFill size={30} />
-          <span className="ms-2 fs-5 uppercase">ADD ITEM</span>
+          <span className="ms-2 fs-5 uppercase">{ShoppingItemText.ADD_ITEM}</span>
         </Link>
         </div>
         <div
@@ -44,9 +44,9 @@ const ShoppingItem = () => {
         </div>
       </div>
       { isError ? (
-        <h4 className="text-center m-auto">Oh no, there was an error</h4>
+        <h4 className="text-center m-auto">{ShoppingItemText.Error_msg}</h4>
       ) : isLoading ? (
-        <h1 className="text-center m-auto">Loading...</h1>
+        <h1 className="text-center m-auto">{ShoppingItemText.Loading}</h1>
       ) : listView ? (<ShoppingList />) : (<ShoppingCard/>)}
     </Container>
   );

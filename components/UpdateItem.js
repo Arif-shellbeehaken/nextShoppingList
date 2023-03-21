@@ -11,7 +11,7 @@ import {
 } from "reactstrap";
 
 import useUpdateItemHook from "../BusinessLogic/useUpdateItemHook";
-
+import UpdateItemText from "../constaint/enum/updateItem";
 const UpdateItem = ({itemId}) => {
 
   const { handleOnSubmit,
@@ -22,12 +22,12 @@ const UpdateItem = ({itemId}) => {
   return (
     <div className="offset-col-3 col-6 ">
       <div className="mt-5 mb-5 items-center">
-        <h2 className="">Update Item</h2>
+        <h2 className="">{UpdateItemText.Update_Item}</h2>
       </div>
         <Form onSubmit={handleOnSubmit}>
               <Row>
                 <Col md={6}>
-                  <Label for="item_name">Item Name</Label>
+                  <Label for="item_name">{UpdateItemText.Item_Name}</Label>
                   <Input
                     type="text"
                     name="item_name"
@@ -39,7 +39,7 @@ const UpdateItem = ({itemId}) => {
                 </Col>
                 <Col md={6}>
                   <FormGroup>
-                    <Label for="category">Category</Label>
+                    <Label for="category">{UpdateItemText.Category}</Label>
                     <Input
                       type="text"
                       name="category"
@@ -53,7 +53,7 @@ const UpdateItem = ({itemId}) => {
               </Row>
               <Row>
                 <Col md={6}>
-                  <Label for="price">Price</Label>
+                  <Label for="price">{UpdateItemText.Price}</Label>
                   <Input
                     type="number"
                     name="price"
@@ -64,7 +64,7 @@ const UpdateItem = ({itemId}) => {
                 </Col>
                 <Col md={6}>
                   <FormGroup>
-                    <Label for="item_image">Image</Label>
+                    <Label for="item_image">{UpdateItemText.Image}</Label>
                     <Input
                       type="file"
                       name="item_image"
@@ -77,7 +77,7 @@ const UpdateItem = ({itemId}) => {
               </Row>
               <FormGroup>
                 <Button color="dark" style={{ marginTop: "2rem" }} block>
-                  {isLoading ? "Updateting..." : "Update Item"}
+                  {isLoading ? UpdateItemText.Updateting : UpdateItemText.Update_Item}
                 </Button>
               </FormGroup>
         </Form>

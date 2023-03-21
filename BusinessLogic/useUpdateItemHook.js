@@ -9,11 +9,12 @@ import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from 'next/router';
 
 const useUpdateItemHook = ({itemId}) => {
-    const { data } = useGetItemQuery(itemId);
-    const [previousData, setPreviousData] = useState(data?.item || {});
-    const [formData, setFormData] = useState({});
-    const [imgUrl, setImgUrl] = useState("");
-    const [updateItem, isSuccess, isError, isLoading, error] =
+  const [previousData, setPreviousData] = useState(data?.item || {});
+  const [formData, setFormData] = useState({});
+  const [imgUrl, setImgUrl] = useState("");
+
+  const { data } = useGetItemQuery(itemId);
+  const [updateItem, isSuccess, isError, isLoading, error] =
   useUpdateItemMutation();
 
     const router = useRouter()
@@ -23,13 +24,12 @@ const useUpdateItemHook = ({itemId}) => {
       imgFrom.append("file", event.target.files[0]);
       imgFrom.append("upload_preset", "shoppingCard");
   
-      const imgData = await fetch("https://api.cloudinary.com/v1_1/drvutnctp/image/upload",
+      const imgData = await fetch(Msg.cloudinary_url,
         {
           method: "POST",
           body: imgFrom,
         }
       ).then((response) => response.json());
-      console.log({imgData});
       setImgUrl(imgData.url);
     };
   

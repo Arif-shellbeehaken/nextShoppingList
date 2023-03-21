@@ -10,7 +10,7 @@ import {
   NavLink,
 } from "reactstrap";
 
-
+import NavbarText from "../constaint/enum/navbar";
 import { useSession } from "next-auth/react";
 import Logout from "./auth/Logout";
 
@@ -25,7 +25,7 @@ const NavbarSection = () => {
     <Fragment>
       <NavItem className="mt-2">
         <span className="navbar-text">
-          Welcome{" "}
+          {NavbarText.Welcome}{" "}
           <strong className="text-info">
             {session?.user?.name || session?.user?.user?.name}
           </strong>
@@ -42,10 +42,10 @@ const NavbarSection = () => {
   const guestLinks = (
     <Fragment>
       <NavItem>
-        <NavLink href="/auth/register" className="ms-2">Register</NavLink>
+        <NavLink href="/auth/register" className="ms-2">{NavbarText.Register}</NavLink>
       </NavItem>
       <NavItem>
-        <NavLink href="/auth/signin" className="ms-2">Login</NavLink>
+        <NavLink href="/auth/signin" className="ms-2">{NavbarText.Login}</NavLink>
       </NavItem>
     </Fragment>
   );
@@ -53,10 +53,10 @@ const NavbarSection = () => {
   return (
     <div>
       <Navbar color="dark" dark expand="sm" className="mb-5">
-        <NavbarBrand href="/">ShoppingList</NavbarBrand>
+        <NavbarBrand href="/">{NavbarText.ShoppingList}</NavbarBrand>
         <Nav navbar>
           <NavItem>
-            <NavLink href="/user" className="ms-2">User</NavLink>
+            <NavLink href="/user" className="ms-2">{NavbarText.User}</NavLink>
           </NavItem>
         </Nav>
         <NavbarToggler onClick={handleToggle} />

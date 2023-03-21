@@ -9,7 +9,6 @@ const index = () => {
             <div className='m-5 d-flex justify-content-center'>
                 <Login />
             </div>
-
         </Container>
     </div>
   )

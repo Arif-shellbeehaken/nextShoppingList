@@ -9,20 +9,22 @@ import {
   NavLink,
 } from "reactstrap";
 
+import LoginText from "../../constaint/enum/login";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import useAuthHook from "../../BusinessLogic/useAuthHook";
+
 const Login = () => {
   const {handleLoginOnSubmit: handleOnSubmit,handleChangeEmail,handleChangePassword } = useAuthHook();
   return (
     <>
     <div className="offset-col-3 col-6 ">
       <div className="mt-5 mb-5 items-center">
-        <h2 className="">Login</h2>
+        <h2 className="">{LoginText.Login}</h2>
       </div>
             <Form>
               <FormGroup>
-                <Label for="email">Email</Label>
+                <Label for="email">{LoginText.Email}</Label>
                 <Input
                   type="email"
                   name="email"
@@ -32,7 +34,7 @@ const Login = () => {
                   onChange={handleChangeEmail}
                 />
 
-                <Label for="password">Password</Label>
+                <Label for="password">{LoginText.Password}</Label>
                 <Input
                   type="password"
                   name="password"
@@ -47,7 +49,7 @@ const Login = () => {
                   block
                   onClick={handleOnSubmit}
                 >
-                  Login
+                  {LoginText.Login}
                 </Button>
               </FormGroup>
             </Form>
@@ -73,7 +75,7 @@ const Login = () => {
                       height={25}
                       alt="github"
                     />{" "}
-                    Login with Google
+                    {LoginText.Login_with_Google}
                   </NavLink>
                 </div>
                 <div className="border rounded p-2 mb-3">
@@ -92,7 +94,7 @@ const Login = () => {
                       height={25}
                       alt="github"
                     />{" "}
-                    Login with Github
+                    {LoginText.Login_with_Github}
                   </NavLink>
                 </div>
               </Fragment>

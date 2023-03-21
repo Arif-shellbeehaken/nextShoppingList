@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Msg from "../constaint/text.json";
 import {
   useGetItemsQuery,
@@ -9,16 +9,20 @@ import {
 import toast, {Toaster} from "react-hot-toast";
 import Swal from "sweetalert2";
 import { useSession } from "next-auth/react";
+import { useRouter } from 'next/router';
 
 const useShoppingListHook = () => {
+    const router = useRouter();
     const { data: session } = useSession();
+    
     const [listView, setListView] = useState(false);
     const [logedEmail, setLogedEmail] = useState(
       session?.user?.email || session?.user?.user?.email
-    );
-    const [deleteItem, isSuccess, isError] = useDeleteItemMutation();
-    const [likeDislike, {isSuccess: reactSuccess}] = useLikeDislikeMutation();
-  
+      );
+      const [deleteItem, isSuccess, isError] = useDeleteItemMutation();
+      const [likeDislike, {isSuccess: reactSuccess}] = useLikeDislikeMutation();
+      
+
     const handleDelete = (id) => {
 
       if (!session) {
@@ -60,8 +64,11 @@ const useShoppingListHook = () => {
         return toast.error(Msg.UnAuthorize);
       }
       try {
-        await likeDislike({ id, email: logedEmail });
-        if(reactSuccess) toast.success(Msg.updateItem.success);
+        const likeDislikeStatus = await likeDislike({ id, email: logedEmail });
+        if(likeDislikeStatus?.data?.code === 200) toast.success(Msg.updateItem.success);
+        else toast.success(Msg.updateItem.error);
+
+        router.reload("/");
       } catch (err) {
         toast.error(Msg.updateItem.error, err);
       }

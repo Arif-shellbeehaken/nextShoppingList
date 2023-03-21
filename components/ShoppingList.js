@@ -6,9 +6,10 @@ import { BsFillTrashFill, BsWrench, BsGrid } from "react-icons/bs";
 
 import useShoppingListHook from "../BusinessLogic/useShoppingListHook";
 import Link from "next/link";
+import ShoppingListText from "../constaint/enum/shoppingList";
 
 const ShoppingList = () => {
-  const { useGetItemsQuery, handleDelete } = useShoppingListHook();
+  const { useGetItemsQuery, handleDelete, logedEmail } = useShoppingListHook();
   const { data } = useGetItemsQuery();
   return (
     <div className="col-12">
@@ -16,11 +17,11 @@ const ShoppingList = () => {
         <thead>
           <tr>
             <th>#</th>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Action</th>
+            <th>{ShoppingListText.Image}</th>
+            <th>{ShoppingListText.Name}</th>
+            <th>{ShoppingListText.Category}</th>
+            <th>{ShoppingListText.Price}</th>
+            <th>{ShoppingListText.Action}</th>
           </tr>
         </thead>
         <tbody>
@@ -34,23 +35,23 @@ const ShoppingList = () => {
               <td>{item.category}</td>
               <td>{item.price}</td>
               <td>
-                <Button
-                  className="remove-btn"
-                  color="danger"
-                  size="md"
-                  onClick={() => handleDelete(item._id)}
-                >
-                  <BsFillTrashFill />
-                </Button>{" "}
-                <Link href={`/item/edit-item/${item._id}`}>
-                  <Button
-                    className="edit-btn ms-3"
-                    color="info"
-                    size="md"
-                  >
-                    <BsWrench />
-                  </Button>
-                </Link>
+                {logedEmail === item.owner && (
+                  <>
+                    <Button
+                      className="remove-btn"
+                      color="danger"
+                      size="md"
+                      onClick={() => handleDelete(item._id)}
+                    >
+                      <BsFillTrashFill />
+                    </Button>{" "}
+                    <Link href={`/item/edit-item/${item._id}`}>
+                      <Button className="edit-btn ms-3" color="info" size="md">
+                        <BsWrench />
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </td>
             </tr>
           ))}

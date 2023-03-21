@@ -1,12 +1,14 @@
 {
     "register":  {
        "success" : "User registration successflly done.",
-       "error" : "Failed to save the user data"
+       "error" : "Failed to save the user data",
+       "errorEmail": "Given email address is incorrect!"
     },
     "UnAuthorize": "Sorry! You are not logged in. Please login first!",
     "addItem": {
         "success" : "Item Added Successfully",
-        "error": "Failed to save the item data"
+        "error": "Failed to save the item data",
+        "ItemNameRequired": "Item Name Required"
     },
     "updateItem": {
         "success" : "Item Updated Successfully.",
