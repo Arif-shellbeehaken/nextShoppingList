@@ -20,7 +20,7 @@ const useShoppingListHook = () => {
       session?.user?.email || session?.user?.user?.email
       );
       const [deleteItem, isSuccess, isError] = useDeleteItemMutation();
-      const [likeDislike] = useLikeDislikeMutation();
+      const [likeDislike, {isLoading}] = useLikeDislikeMutation();
       
 
     const handleDelete = (id) => {
@@ -96,7 +96,8 @@ const useShoppingListHook = () => {
       handleListView,
       logedEmail,
       listView,
-      Toaster
+      Toaster,
+      isLoading
     };
   };
 

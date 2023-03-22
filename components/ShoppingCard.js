@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React,{useState, useEffect} from "react";
 import {
   BsFillTrashFill,
   BsHeart,
@@ -21,11 +21,12 @@ import {
 import useShoppingListHook from "../BusinessLogic/useShoppingListHook";
 
 const ShoppingCard = () => {
-  const { useGetItemsQuery, handleDelete, handleReaction, logedEmail } =
+  
+  const { useGetItemsQuery, handleDelete, handleReaction, isLoading, logedEmail } =
     useShoppingListHook();
 
   const { data } = useGetItemsQuery();
-  
+
   return (
     <div className="col-12">
       <CardGroup>
@@ -73,10 +74,11 @@ const ShoppingCard = () => {
                     </div>
                   )}
                   <div className="d-flex justify-content-between">
+                    
                     <Button
                       className="border-white bg-white transparent"
                       size="md"
-                      onClick={() => handleReaction(item._id)}
+                      onClick={() => !isLoading && handleReaction(item._id)}
                     >
                       {!item.likes.includes(logedEmail) ? (
                         <BsHeart
